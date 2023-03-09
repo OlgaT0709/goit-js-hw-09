@@ -42,36 +42,57 @@ flatpickr("input#datetime-picker", {
         refs.btnStart.disabled = true;
         } else {
             refs.btnStart.disabled = false;
-            clearInterval(intervalId);
         };
     },
-  // Натисканням на кнопку «Start» починається відлік часу до обраної дати з моменту натискання.
+// Натисканням на кнопку «Start» починається відлік часу до обраної дати з моменту натискання.
     onClose(selectedDates) {
         const selectedDate = selectedDates[0];
-        let deltaTime = selectedDate - options.defaultDate;
-        intervalId = setInterval(() => {
-            if (deltaTime <= 1000) {
-                deltaTime = null;
-                clearInterval(intervalId);
-                refs.showSeconds.textContent = '00';
-                refs.timer.style.color = 'red';
-                refs.timer.style.fontSize = '50px';
-                setTimeout(() => {
-                    refs.timer.style.color = 'blue';
-                    refs.timer.style.fontSize = '14px';
-                }, 3000);
-                return;
-            };
-            const { days, hours, mins, secs } = getTimeComponents(deltaTime);
-            refs.showDays.textContent = `${days}`;
-            refs.showHours.textContent = `${hours}`;
-            refs.showMinutes.textContent = `${mins}`;
-            refs.showSeconds.textContent = `${secs}`;
-            deltaTime -= 1000;
-        }, INTERVAL_CHANGE);
+        startTimer(selectedDate , options.defaultDate);
+      
     },
     
 });
+
+// Таймер
+function startTimer(selectedDate, defaultDate) {
+    clearInterval(intervalId);
+    let deltaTime = selectedDate - defaultDate;
+    timerInterfaceUpdate(deltaTime);
+    intervalId = setInterval(() => {
+        deltaTime -= INTERVAL_CHANGE;
+        if (deltaTime <= 1000) {
+            clearInterval(intervalId);
+            finishTimerInterface()
+            return;
+        };
+        timerInterfaceUpdate(deltaTime);
+        
+    }, INTERVAL_CHANGE);
+    
+};
+
+// оновлює інтерфейс таймеру
+function timerInterfaceUpdate(time) {
+    const { days, hours, mins, secs } = getTimeComponents(time);
+        refs.showDays.textContent = `${days}`;
+        refs.showHours.textContent = `${hours}`;
+        refs.showMinutes.textContent = `${mins}`;
+        refs.showSeconds.textContent = `${secs}`;
+}
+
+// фінальний інтерфейс таймеру
+function finishTimerInterface() {
+    refs.showDays.textContent = '00';
+    refs.showHours.textContent = '00';
+    refs.showMinutes.textContent = '00';
+    refs.showSeconds.textContent = '00';
+    refs.timer.style.color = 'red';
+    refs.timer.style.fontSize = '50px';
+    setTimeout(() => {
+        refs.timer.style.color = 'blue';
+        refs.timer.style.fontSize = '14px';
+    }, 3000);
+}
 
 // записує число у форматі string 00
 function pad(value) {
