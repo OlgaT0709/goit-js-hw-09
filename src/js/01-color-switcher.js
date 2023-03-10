@@ -6,6 +6,8 @@ const refs = {
 
 const INTERVAL_CHANGE_COLOR = 1000;
 let intervalId = null;
+refs.btnStartChangeColor.disabled = false; 
+refs.btnStopChangeColor.disabled = true;
 
 refs.btnStartChangeColor.addEventListener('click', onStartChangeColor);
 refs.btnStopChangeColor.addEventListener('click', onStopChangeColor);
@@ -18,13 +20,15 @@ function onStartChangeColor() {
         refs.body.style.backgroundColor = getRandomHexColor();
     }, INTERVAL_CHANGE_COLOR);
     
-    refs.btnStartChangeColor.setAttribute("disabled", "");
+    refs.btnStartChangeColor.disabled = true;
+    refs.btnStopChangeColor.disabled = false;
 };
 // натисканням на кнопку «Stop» зміна кольору фону зупиняється
 
 function onStopChangeColor() {
     clearInterval(intervalId);
-    refs.btnStartChangeColor.removeAttribute("disabled");  
+    refs.btnStartChangeColor.disabled = false; 
+    refs.btnStopChangeColor.disabled = true;
 };
 
 // Для генерування випадкового кольору використовується функцію getRandomHexColor.
