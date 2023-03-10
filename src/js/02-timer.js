@@ -41,9 +41,9 @@ const options = {
 };
 
 // ініціалізуємо бібліотеку"flatpickr"  на елементі input[type="text"]
-flatpickr("input#datetime-picker", options);
+flatpickr(refs.inputDate, options);
 
-// очистка попереднього інтервалу
+// очистка попереднього інтервалу та обнулення часу
 refs.inputDate._flatpickr.calendarContainer.addEventListener('mousedown', () => {
     clearInterval(intervalId);
     startTimerInterface();  
@@ -103,19 +103,6 @@ function finishTimerInterface() {
         refs.timer.style.fontSize = '14px';
     }, 3000);
 };
-
-// Перевіряємо дату іншим методом
-// const refs.calendar = document.querySelector('#datetime-picker'),
-// refs.calendar.addEventListener('change', onChangeChooseDate);
-// function onChangeChooseDate(event) {
-//     const selectedDate = new Date(event.target.value)
-//     if (selectedDate <= defaultDate) {
-//         alert("Please choose a date in the future");
-//         refs.btnStart.disabled = true;
-//     } else {
-//         refs.btnStart.disabled = false;
-//     }
-// };
 
 
       
