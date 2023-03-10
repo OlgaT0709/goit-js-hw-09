@@ -8,6 +8,7 @@ const refs = {
     showHours: document.querySelector('[data-hours]'),
     showMinutes: document.querySelector('[data-minutes]'),
     showSeconds: document.querySelector('[data-seconds]'),
+    inputDate: document.querySelector('#datetime-picker'),
     timer: document.querySelector('.timer'),
 }
 
@@ -18,43 +19,47 @@ refs.timer.style.marginTop = '10px';
 refs.timer.style.color = 'blue';
 refs.timer.style.fontSize = '14px';
 
+const INTERVAL_CHANGE = 1000;
+let intervalId = null;
+refs.btnStart.disabled = true;
+
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-};
-
-const INTERVAL_CHANGE = 1000;
-let intervalId = null;
-
-refs.btnStart.disabled = true;
-
-// ініціалізуємо бібліотеку"flatpickr"  на елементі input[type="text"]
-flatpickr("input#datetime-picker", {
-    ...options,
-// Перевіряємо дату, щоб була в майбутньому.
-    onChange(selectedDates) {    
+  
+  // Перевіряємо дату, щоб була в майбутньому.
+  onClose(selectedDates) {   
         const selectedDate = selectedDates[0];
         if (selectedDate <= options.defaultDate) {
         alert("Please choose a date in the future");
-        refs.btnStart.disabled = true;
         } else {
             refs.btnStart.disabled = false;
         };
     },
-// Натисканням на кнопку «Start» починається відлік часу до обраної дати з моменту натискання.
-    onClose(selectedDates) {
-        const selectedDate = selectedDates[0];
-        startTimer(selectedDate , options.defaultDate);
-      
-    },
-    
+};
+
+// ініціалізуємо бібліотеку"flatpickr"  на елементі input[type="text"]
+flatpickr("input#datetime-picker", options);
+
+// очистка попереднього інтервалу
+refs.inputDate._flatpickr.calendarContainer.addEventListener('mousedown', () => {
+    clearInterval(intervalId);
+    startTimerInterface();  
 });
+
+// Натисканням на кнопку «Start» починається відлік часу до обраної дати з моменту натискання.
+refs.btnStart.addEventListener('click', onClickBtnStart)
+
+function onClickBtnStart() {
+    refs.btnStart.disabled = true;        
+    const selectedDate =  refs.inputDate._flatpickr.selectedDates[0]
+    startTimer(selectedDate, options.defaultDate);
+};
 
 // Таймер
 function startTimer(selectedDate, defaultDate) {
-    clearInterval(intervalId);
     let deltaTime = selectedDate - defaultDate;
     timerInterfaceUpdate(deltaTime);
     intervalId = setInterval(() => {
@@ -79,12 +84,17 @@ function timerInterfaceUpdate(time) {
         refs.showSeconds.textContent = `${secs}`;
 }
 
-// фінальний інтерфейс таймеру
-function finishTimerInterface() {
+// початковий інтерфейс таймеру
+function startTimerInterface() {
     refs.showDays.textContent = '00';
     refs.showHours.textContent = '00';
     refs.showMinutes.textContent = '00';
     refs.showSeconds.textContent = '00';
+};
+
+// фінальний інтерфейс таймеру
+function finishTimerInterface() {
+    startTimerInterface(); 
     refs.timer.style.color = 'red';
     refs.timer.style.fontSize = '50px';
     setTimeout(() => {
