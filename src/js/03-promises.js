@@ -40,10 +40,12 @@ function onCreatePromises(event) {
   form.reset();
 };
 
-// функція, яка робить перевірку коректності введених даних (поитивне число)
+// функція, яка робить перевірку коректності введених даних ( число більше 0)
 
-function isValidPositiveNumber(value) {
-  return !isNaN(value) && Number(value) > 0;
+function isValidPositiveNumber({ step, amount, delay }) {
+  return !isNaN(step) && step > 0 &&
+         !isNaN(amount) && amount > 0 &&
+         !isNaN(delay) && delay > 0;
 }
 
 // замість console.log(), використовуємо бібліотеку notiflix
