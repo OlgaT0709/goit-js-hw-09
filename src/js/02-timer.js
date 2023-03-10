@@ -44,10 +44,13 @@ const options = {
 flatpickr(refs.inputDate, options);
 
 // очистка попереднього інтервалу та обнулення часу
-refs.inputDate._flatpickr.calendarContainer.addEventListener('mousedown', () => {
+refs.inputDate._flatpickr.calendarContainer.addEventListener('mousedown', onMousedownFlatpicker);
+
+function onMousedownFlatpicker() {
     clearInterval(intervalId);
     startTimerInterface();  
-});
+    refs.btnStart.disabled = true;
+};
 
 // Натисканням на кнопку «Start» починається відлік часу до обраної дати з моменту натискання.
 refs.btnStart.addEventListener('click', onClickBtnStart)
