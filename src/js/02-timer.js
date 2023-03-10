@@ -53,6 +53,7 @@ refs.inputDate._flatpickr.calendarContainer.addEventListener('mousedown', () => 
 refs.btnStart.addEventListener('click', onClickBtnStart)
 
 function onClickBtnStart() {
+    clearInterval(intervalId);  
     refs.btnStart.disabled = true;        
     const selectedDate =  refs.inputDate._flatpickr.selectedDates[0]
     startTimer(selectedDate, options.defaultDate);
