@@ -1,7 +1,6 @@
-// Імпорт бібліотеки
 import flatpickr from "flatpickr";
-// Додатковий імпорт стилів
 import "flatpickr/dist/flatpickr.min.css";
+import getTimeComponents from '../services/timeconverter';
 
 const refs = {
     btnStart: document.querySelector('[data-start]'),
@@ -34,7 +33,7 @@ refs.btnStart.disabled = true;
 // ініціалізуємо бібліотеку"flatpickr"  на елементі input[type="text"]
 flatpickr("input#datetime-picker", {
     ...options,
-// Перевіряємо дату.
+// Перевіряємо дату, щоб була в майбутньому.
     onChange(selectedDates) {    
         const selectedDate = selectedDates[0];
         if (selectedDate <= options.defaultDate) {
@@ -92,24 +91,7 @@ function finishTimerInterface() {
         refs.timer.style.color = 'blue';
         refs.timer.style.fontSize = '14px';
     }, 3000);
-}
-
-// записує число у форматі string 00
-function pad(value) {
-    return String(value).padStart(2, '0');
-}
-
-// вираховуємо скільки вміщується днів,годин,хвилин та секунд в мілісекундах
-function getTimeComponents(time) {
-    const days = pad(Math.floor((time % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24)));
-    const hours = pad(Math.floor((time % (1000 * 60 * 60 * 24 )) / (1000 * 60 * 60 )));
-    const mins = pad(Math.floor((time % (1000 * 60 * 60 )) / (1000 * 60 )));
-    const secs = pad(Math.floor((time % (1000 * 60 )) / (1000 )));
-
-    return {days, hours, mins, secs};
 };
-
-
 
 // Перевіряємо дату іншим методом
 // const refs.calendar = document.querySelector('#datetime-picker'),
