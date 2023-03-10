@@ -43,9 +43,9 @@ function onCreatePromises(event) {
 // функція, яка робить перевірку коректності введених даних ( число більше 0)
 
 function isValidPositiveNumber({ step, amount, delay }) {
-  return !isNaN(step) && step > 0 &&
+  return !isNaN(step) && step >= 0 &&
          !isNaN(amount) && amount > 0 &&
-         !isNaN(delay) && delay > 0;
+         !isNaN(delay) && delay >= 0;
 }
 
 // замість console.log(), використовуємо бібліотеку notiflix
